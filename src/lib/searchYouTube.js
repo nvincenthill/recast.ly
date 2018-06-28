@@ -1,8 +1,7 @@
-var searchYouTube = (query, options, callback) => {
-  console.log('searchingYT', query);
+var searchYouTube = (options, callback) => {
   $.ajax({
     data: {
-      q: query,
+      q: options.q,
       part: 'snippet',
       type: 'video',
       maxResults: 5,
@@ -13,11 +12,11 @@ var searchYouTube = (query, options, callback) => {
     type: 'GET',
     dataType: 'jsonp',
     success: function(response) {
-      console.log('Successful fetch');
+      // console.log('Successful fetch');
       callback(response);
     },
     error: function() {
-      console.log('Failed to fetch!');
+      // console.log('Failed to fetch!');
     }
   });
 };

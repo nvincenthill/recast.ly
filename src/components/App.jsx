@@ -1,29 +1,54 @@
 class App extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      videos: window.exampleVideoData,
-      currentVideo: window.exampleVideoData[0]
+      videos: [],
+      currentVideo: {},
+      input: 'cats'
     };
 
+    // bind this context
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleInput = this.handleInput.bind(this);
     this.handleVideoChange = this.handleVideoChange.bind(this);
-    this.handleAJAXResponse = this.handleAJAXResponse.bind(this);
   }
 
+  // change the current video
   handleVideoChange(video) {
     this.setState({
       currentVideo: video
     });
   }
 
+  // handle input button clicks
+  handleClick() {
+    this.props.searchYouTube({q: this.state.input}, this.handleAJAXResponse.bind(this));
+  }
+
+  // handle user input from input box
+  handleInput(e) {
+    console.log(e);
+    this.setState({
+      input: e.target.value
+    });
+  }
+
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.props.searchYouTube({q: this.state.input}, this.handleAJAXResponse.bind(this));
+    }
+  }
+
   handleAJAXResponse(data) {
-    console.log(data);
     this.setState({ videos: data.items});
     this.handleVideoChange(data.items[0]);
   }
 
   componentDidMount() {
-    window.searchYouTube('cats', {}, this.handleAJAXResponse);
+    this.props.searchYouTube({q: this.state.input}, this.handleAJAXResponse.bind(this));
+    window.addEventListener('keydown', this.handleKeyPress);
   }
 
   render() {
@@ -31,15 +56,21 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <Search />
+            {this.state.videos.length === 0 ? null :
+              <Search handleInput={this.handleInput} handleClick={this.handleClick}/>
+            }
           </div>
         </nav>
         <div className="row">
           <div className="col-md-7">
-            <VideoPlayer video={this.state.currentVideo} />
+            {Object.keys(this.state.currentVideo).length === 0 ? null :
+              <VideoPlayer video={this.state.currentVideo} />
+            }
           </div>
           <div className="col-md-5">
-            <VideoList videos={this.state.videos} handleVideoChange={this.handleVideoChange}/>
+            {this.state.videos.length === 0 ? null :
+              <VideoList videos={this.state.videos} handleVideoChange={this.handleVideoChange}/>
+            }
           </div>
         </div>
       </div>
