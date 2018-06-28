@@ -56,19 +56,19 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            {this.state.videos.length === 0 ? null :
+            {this.state.videos.length === 0 ||
               <Search handleInput={this.handleInput} handleClick={this.handleClick}/>
             }
           </div>
         </nav>
         <div className="row">
           <div className="col-md-7">
-            {Object.keys(this.state.currentVideo).length === 0 ? null :
+            {Object.keys(this.state.currentVideo).length === 0 ||
               <VideoPlayer video={this.state.currentVideo} />
             }
           </div>
           <div className="col-md-5">
-            {this.state.videos.length === 0 ? null :
+            {this.state.videos.length === 0 ||
               <VideoList videos={this.state.videos} handleVideoChange={this.handleVideoChange}/>
             }
           </div>
