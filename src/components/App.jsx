@@ -33,6 +33,10 @@ class App extends React.Component {
     this.setState({
       input: e.target.value
     });
+
+    // call a debounced search after input change + half a second
+    var debouncedSearch = _.debounce(this.handleClick, 500);
+    debouncedSearch();
   }
 
   handleKeyPress(e) {
@@ -78,6 +82,4 @@ class App extends React.Component {
   }
 }
 
-// In the ES6 spec, files are "modules" and do not share a top-level scope
-// `var` declarations will only exist globally where explicitly defined
 window.App = App;
